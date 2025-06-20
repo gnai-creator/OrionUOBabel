@@ -67,33 +67,33 @@ public:
     AutoResetEvent m_AutoResetEvent;
 
     //!Адреса файлов в памяти
-    WISP_FILE::CMappedFile m_AnimIdx[6];
+    WISP_FILE::CMappedFile m_AnimIdx[MAX_MAPS_COUNT];
     WISP_FILE::CMappedFile m_ArtIdx;
     WISP_FILE::CMappedFile m_GumpIdx;
     WISP_FILE::CMappedFile m_LightIdx;
     WISP_FILE::CMappedFile m_MultiIdx;
     WISP_FILE::CMappedFile m_SkillsIdx;
     WISP_FILE::CMappedFile m_SoundIdx;
-    WISP_FILE::CMappedFile m_StaticIdx[6];
+    WISP_FILE::CMappedFile m_StaticIdx[MAX_MAPS_COUNT];
     WISP_FILE::CMappedFile m_TextureIdx;
 
-    std::fstream m_AnimMul[6];
+    std::fstream m_AnimMul[MAX_MAPS_COUNT];
     WISP_FILE::CMappedFile m_AnimdataMul;
     WISP_FILE::CMappedFile m_ArtMul;
     WISP_FILE::CMappedFile m_HuesMul;
     WISP_FILE::CMappedFile m_GumpMul;
     WISP_FILE::CMappedFile m_LightMul;
-    WISP_FILE::CMappedFile m_MapMul[6];
+    WISP_FILE::CMappedFile m_MapMul[MAX_MAPS_COUNT];
     WISP_FILE::CMappedFile m_MultiMul;
     WISP_FILE::CMappedFile m_RadarcolMul;
     WISP_FILE::CMappedFile m_SkillsMul;
     WISP_FILE::CMappedFile m_SoundMul;
-    WISP_FILE::CMappedFile m_StaticMul[6];
+    WISP_FILE::CMappedFile m_StaticMul[MAX_MAPS_COUNT];
     WISP_FILE::CMappedFile m_TextureMul;
     WISP_FILE::CMappedFile m_TiledataMul;
     WISP_FILE::CMappedFile m_UnifontMul[20];
     WISP_FILE::CMappedFile m_VerdataMul;
-    WISP_FILE::CMappedFile m_FacetMul[6];
+    WISP_FILE::CMappedFile m_FacetMul[MAX_MAPS_COUNT];
 
     WISP_FILE::CMappedFile m_MultiMap;
     WISP_FILE::CMappedFile m_SpeechMul;
@@ -105,18 +105,18 @@ public:
     CUopMappedFile m_SoundLegacyMUL;
     CUopMappedFile m_Tileart;
     CUopMappedFile m_MainMisc;
-    CUopMappedFile m_MapUOP[6];
-    CUopMappedFile m_MapXUOP[6];
+    CUopMappedFile m_MapUOP[MAX_MAPS_COUNT];
+    CUopMappedFile m_MapXUOP[MAX_MAPS_COUNT];
     CUopMappedFile m_AnimationSequence;
     CUopMappedFile m_MultiCollection;
 
     //Map patches
-    WISP_FILE::CMappedFile m_MapDifl[6];
-    WISP_FILE::CMappedFile m_MapDif[6];
+    WISP_FILE::CMappedFile m_MapDifl[MAX_MAPS_COUNT];
+    WISP_FILE::CMappedFile m_MapDif[MAX_MAPS_COUNT];
 
-    WISP_FILE::CMappedFile m_StaDifl[6];
-    WISP_FILE::CMappedFile m_StaDifi[6];
-    WISP_FILE::CMappedFile m_StaDif[6];
+    WISP_FILE::CMappedFile m_StaDifl[MAX_MAPS_COUNT];
+    WISP_FILE::CMappedFile m_StaDifi[MAX_MAPS_COUNT];
+    WISP_FILE::CMappedFile m_StaDif[MAX_MAPS_COUNT];
 
     bool Load();
     bool LoadWithUOP();

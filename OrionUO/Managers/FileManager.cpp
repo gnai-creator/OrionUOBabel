@@ -125,7 +125,7 @@ bool CFileManager::Load()
     m_SpeechMul.Load(g_App.UOFilesPath("speech.mul"));
     m_LangcodeIff.Load(g_App.UOFilesPath("Langcode.iff"));
 
-    IFOR (i, 0, 6)
+    IFOR (i, 0, MAX_MAPS_COUNT)
     {
         if (i > 1)
         {
@@ -245,7 +245,7 @@ bool CFileManager::LoadWithUOP()
     m_SpeechMul.Load(g_App.UOFilesPath("speech.mul"));
     m_LangcodeIff.Load(g_App.UOFilesPath("Langcode.iff"));
 
-    IFOR (i, 0, 6)
+    IFOR (i, 0, MAX_MAPS_COUNT)
     {
         if (i > 1)
         {
@@ -321,7 +321,7 @@ void CFileManager::Unload()
 
     m_LangcodeIff.Unload();
 
-    IFOR (i, 0, 6)
+    IFOR (i, 0, MAX_MAPS_COUNT)
     {
         m_AnimIdx[i].Unload();
         m_AnimMul[i].close();
@@ -370,7 +370,7 @@ void CFileManager::SendFilesInfo()
         CPluginPacketFileInfo(OFI_HUES_MUL, (uint64)m_HuesMul.Start, (uint64)m_HuesMul.Size)
             .SendToPlugin();
 
-    IFOR (i, 0, 6)
+    IFOR (i, 0, MAX_MAPS_COUNT)
     {
         if (m_MapMul[i].Start != NULL)
             CPluginPacketFileInfo(
