@@ -421,7 +421,7 @@ bool COrion::Install()
 
     g_CreateCharacterManager.Init();
 
-    IFOR (i, 0, 6)
+    IFOR (i, 0, MAX_MAPS_COUNT)
         g_AnimationManager.Init(
             (int)i,
             (size_t)g_FileManager.m_AnimIdx[i].Start,
@@ -535,7 +535,7 @@ void COrion::Uninstall()
 
     g_AuraTexture.Clear();
 
-    IFOR (i, 0, 6)
+    IFOR (i, 0, MAX_MAPS_COUNT)
         g_MapTexture[i].Clear();
 
     IFOR (i, 0, 2)
@@ -5950,7 +5950,7 @@ void COrion::AddJournalMessage(CTextData *msg, const string &name)
 void COrion::ChangeMap(uchar newmap)
 {
     WISPFUN_DEBUG("c194_f102");
-    if (newmap < 0 || newmap > 5)
+    if (newmap < 0 || newmap >= MAX_MAPS_COUNT)
         newmap = 0;
 
     if (g_CurrentMap != newmap)
