@@ -39,6 +39,7 @@ GLuint ShaderColorTable = 0;
 GLuint g_ShaderDrawMode = 0;
 
 string g_Language = "ENU";
+string g_MapsLayouts;
 
 GAME_STATE g_GameState = GS_MAIN;
 

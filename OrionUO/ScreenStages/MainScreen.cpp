@@ -245,7 +245,7 @@ int CMainScreen::GetConfigKeyCode(const string &key)
 
     static const string m_Keys[keyCount] = { "acctid",    "acctpassword",  "rememberacctpw",
                                              "autologin", "smoothmonitor", "theabyss",
-                                             "asmut",     "custompath" };
+                                             "asmut",     "custompath",    "maps_layouts" };
 
     string str = ToLowerA(key);
     int result = 0;
@@ -282,6 +282,15 @@ void CMainScreen::LoadCustomPath()
                 case MSCC_CUSTOM_PATH:
                 {
                     g_App.m_UOPath = ToPath(strings[1]);
+                    break;
+                }
+                case MSCC_MAPS_LAYOUTS:
+                {
+                    string layouts = file.RawLine;
+                    size_t pos = layouts.find_first_of('=');
+                    if (pos != string::npos)
+                        g_MapsLayouts = layouts.substr(pos + 1);
+                    break;
                 }
             }
         }
@@ -383,6 +392,15 @@ void CMainScreen::LoadGlobalConfig()
 
                     break;
                 }
+                case MSCC_MAPS_LAYOUTS:
+                {
+                    string layouts = file.RawLine;
+                    size_t pos = layouts.find_first_of('=');
+                    if (pos != string::npos)
+                        g_MapsLayouts = layouts.substr(pos + 1);
+
+                    break;
+                }
                 default:
                     break;
             }
@@ -438,6 +456,11 @@ void CMainScreen::SaveGlobalConfig()
     if (g_App.m_UOPath != g_App.m_ExePath)
     {
         sprintf_s(buf, "CustomPath=%s\n", CStringFromPath(g_App.m_UOPath));
+        fputs(buf, uo_cfg);
+    }
+    if (!g_MapsLayouts.empty())
+    {
+        sprintf_s(buf, "Maps_Layouts=%s\n", g_MapsLayouts.c_str());
         fputs(buf, uo_cfg);
     }
     fs_close(uo_cfg);

@@ -16,6 +16,7 @@
 #include "Wisp/WispGlobal.h"
 #include "FileSystem.h"
 #include "Crypt/CryptEntry.h"
+#include <sstream>
 
 #if defined(ORION_LINUX)
 #define CDECL
@@ -307,7 +308,10 @@ bool COrion::Install()
 
     if (!g_FileManager.Load())
     {
-        auto errMsg = string("Error loading a memmapped file. Please check the log for more info.\nUsing UO search path: ") + StringFromPath(g_App.m_UOPath);
+        auto errMsg =
+            string(
+                "Error loading a memmapped file. Please check the log for more info.\nUsing UO search path: ") +
+            StringFromPath(g_App.m_UOPath);
         g_OrionWindow.ShowMessage(errMsg, "FileManager::Load");
         return false;
     }
@@ -1088,6 +1092,25 @@ bool COrion::LoadClientConfig()
 
             g_MapBlockSize[i].Width = g_MapSize[i].Width / 8;
             g_MapBlockSize[i].Height = g_MapSize[i].Height / 8;
+        }
+
+        if (!g_MapsLayouts.empty())
+        {
+            string token;
+            stringstream ss(g_MapsLayouts);
+            int idx = 0;
+            while (std::getline(ss, token, ';') && idx < MAX_MAPS_COUNT)
+            {
+                int width = 0, height = 0;
+                if (sscanf(token.c_str(), "%d,%d", &width, &height) == 2)
+                {
+                    g_MapSize[idx].Width = width;
+                    g_MapSize[idx].Height = height;
+                    g_MapBlockSize[idx].Width = width / 8;
+                    g_MapBlockSize[idx].Height = height / 8;
+                }
+                ++idx;
+            }
         }
 
         g_CharacterList.ClientFlag = file.ReadInt8();
@@ -3594,8 +3617,8 @@ uint64_t COrion::CreateHash(const char *s)
 void COrion::LoadIndexFiles()
 {
     PART_IDX_BLOCK LandArtPtr = (PART_IDX_BLOCK)g_FileManager.m_ArtIdx.Start;
-    PART_IDX_BLOCK StaticArtPtr = (PART_IDX_BLOCK)(
-        (size_t)g_FileManager.m_ArtIdx.Start + (m_LandData.size() * sizeof(ART_IDX_BLOCK)));
+    PART_IDX_BLOCK StaticArtPtr =
+        (PART_IDX_BLOCK)((size_t)g_FileManager.m_ArtIdx.Start + (m_LandData.size() * sizeof(ART_IDX_BLOCK)));
     PGUMP_IDX_BLOCK GumpArtPtr = (PGUMP_IDX_BLOCK)g_FileManager.m_GumpIdx.Start;
     PTEXTURE_IDX_BLOCK TexturePtr = (PTEXTURE_IDX_BLOCK)g_FileManager.m_TextureIdx.Start;
     PMULTI_IDX_BLOCK MultiPtr = (PMULTI_IDX_BLOCK)g_FileManager.m_MultiIdx.Start;

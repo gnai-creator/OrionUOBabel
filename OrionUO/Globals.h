@@ -104,6 +104,7 @@ extern GLuint ShaderColorTable;
 extern GLuint g_ShaderDrawMode;
 
 extern string g_Language;
+extern string g_MapsLayouts;
 
 extern GAME_STATE g_GameState;
 
