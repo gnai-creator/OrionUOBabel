@@ -23,6 +23,7 @@ private:
         MSCC_THE_ABYSS,
         MSCC_ASMUT,
         MSCC_CUSTOM_PATH,
+        MSCC_MAPS_LAYOUTS,
         MSCC_COUNT,
     };
 
