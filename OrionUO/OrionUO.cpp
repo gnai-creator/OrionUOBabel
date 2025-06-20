@@ -203,6 +203,11 @@ void COrion::ParseCommandLine() // FIXME: move this out
                     string("|") +
                     DecodeArgumentString(strings[1].c_str(), (int)strings[1].length());
         }
+        else if (str == "maps_layouts")
+        {
+            if (haveParam)
+                g_MapsLayouts = strings[1];
+        }
         else if (str == "nowarnings")
             g_ShowWarnings = false;
 #if !USE_ORIONDLL

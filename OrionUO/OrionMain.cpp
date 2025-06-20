@@ -83,6 +83,10 @@ int main(int argc, char **argv)
             g_isHeadless = true;
         else if (!strcmp(argv[i], "--nocrypt"))
             g_EncryptionType = ET_NOCRYPT;
+        else if (!strncmp(argv[i], "--maps-layouts=", 15))
+            g_MapsLayouts = std::string(argv[i] + 15);
+        else if (!strcmp(argv[i], "--maps-layouts") && i + 1 < argc)
+            g_MapsLayouts = std::string(argv[++i]);
     }
 
     if (SDL_Init(SDL_INIT_TIMER) < 0)
