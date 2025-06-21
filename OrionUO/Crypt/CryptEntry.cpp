@@ -4,6 +4,7 @@
 #include "../Wisp/WispDataStream.h"
 #include "../EnumList.h"
 #include "../PluginInterface.h"
+#include "../Constants.h"
 #include "LoginCrypt.h"
 #include "GameCrypt.h"
 //----------------------------------------------------------------------------------
@@ -138,14 +139,19 @@ UCHAR_LIST ApplyInstall(uchar *address, size_t size)
         writter.WriteUInt64LE((size_t)LoadPlugins);
 #endif
 
-        int mapsCount = 6;
+        int mapsCount = MAX_MAPS_COUNT;
 
         if (version < 4)
             writter.WriteUInt8(file.ReadInt8()); //InverseBuylist
         else
         {
-            mapsCount = file.ReadInt8();
-            writter.WriteUInt8(mapsCount);
+            if (!file.IsEOF())
+            {
+                mapsCount = file.ReadInt8();
+                writter.WriteUInt8(mapsCount);
+            }
+            else
+                writter.WriteUInt8(MAX_MAPS_COUNT);
         }
 
         IFOR (i, 0, mapsCount)
