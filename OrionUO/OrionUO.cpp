@@ -1104,17 +1104,21 @@ bool COrion::LoadClientConfig()
             string token;
             stringstream ss(g_MapsLayouts);
             int idx = 0;
+            // Layouts are semicolon separated width,height pairs. Trailing
+            // semicolons yield empty tokens which are ignored rather than
+            // consuming a map slot.
             while (std::getline(ss, token, ';') && idx < MAX_MAPS_COUNT)
             {
                 int width = 0, height = 0;
-                if (sscanf(token.c_str(), "%d,%d", &width, &height) == 2)
+                if (!token.empty() &&
+                    sscanf(token.c_str(), "%d,%d", &width, &height) == 2)
                 {
                     g_MapSize[idx].Width = width;
                     g_MapSize[idx].Height = height;
                     g_MapBlockSize[idx].Width = width / 8;
                     g_MapBlockSize[idx].Height = height / 8;
+                    ++idx;
                 }
-                ++idx;
             }
         }
 
