@@ -7,10 +7,12 @@
 #include "../Constants.h"
 #include "LoginCrypt.h"
 #include "GameCrypt.h"
+#include <cstdlib>
 //----------------------------------------------------------------------------------
 ENCRYPTION_TYPE g_EncryptionType = ET_NOCRYPT;
 size_t g_CryptPluginsCount = 0;
 UCHAR_LIST g_RawData;
+static int g_ForceMapsCount = -1;
 //----------------------------------------------------------------------------------
 static void Init(const bool &mode, u8 *array)
 {
@@ -108,6 +110,12 @@ UCHAR_LIST ApplyInstall(uchar *address, size_t size)
 
     if (size)
     {
+        if (g_ForceMapsCount == -1)
+        {
+            const char *env = getenv("ORION_FORCE_MAPS_COUNT");
+            if (env != nullptr)
+                g_ForceMapsCount = atoi(env);
+        }
         g_RawData.resize(size);
         memcpy(&g_RawData[0], &address[0], size);
 
@@ -139,25 +147,33 @@ UCHAR_LIST ApplyInstall(uchar *address, size_t size)
         writter.WriteUInt64LE((size_t)LoadPlugins);
 #endif
 
-        int mapsCount = MAX_MAPS_COUNT;
+        int mapsCountFromFile = MAX_MAPS_COUNT;
+
+        int mapsToWrite = mapsCountFromFile;
 
         if (version < 4)
             writter.WriteUInt8(file.ReadInt8()); //InverseBuylist
         else
         {
             if (!file.IsEOF())
-            {
-                mapsCount = file.ReadInt8();
-                writter.WriteUInt8(mapsCount);
-            }
-            else
-                writter.WriteUInt8(MAX_MAPS_COUNT);
+                mapsCountFromFile = file.ReadInt8();
+
+            mapsToWrite =
+                (g_ForceMapsCount > 0 ? g_ForceMapsCount : mapsCountFromFile);
+            writter.WriteUInt8(mapsToWrite);
         }
 
-        IFOR (i, 0, mapsCount)
+        int readMaps = (version < 4) ? 0 : mapsCountFromFile;
+        IFOR (i, 0, readMaps)
         {
             writter.WriteUInt16LE(file.ReadUInt16LE());
             writter.WriteUInt16LE(file.ReadUInt16LE());
+        }
+
+        for (int i = readMaps; i < mapsToWrite; i++)
+        {
+            writter.WriteUInt16LE(0);
+            writter.WriteUInt16LE(0);
         }
 
         uchar clientFlag = 0;
@@ -188,6 +204,12 @@ size_t GetPluginsCount()
 {
     return g_CryptPluginsCount;
 }
+void SetCryptForceMapsCount(int count)
+{
+    if (count >= 0 && count <= MAX_MAPS_COUNT)
+        g_ForceMapsCount = count;
+}
+
 //----------------------------------------------------------------------------------
 void CryptInstallNew(uchar *address, size_t size, uchar *result, size_t &resultSize)
 {
